@@ -1,6 +1,4 @@
 class Game:
-    round_id = 1
-
     def __init__(self, turn="X", winner=None, tie=False):
         self.turn = turn
         self.winner = winner
@@ -14,7 +12,14 @@ class Game:
         # fmt: on
 
     def play_game(self):
-        print(f"Round {Game.round_id}")
+        print("Let's play a classic game of TIC-TAC-TOE!")
+        while not self.winner and not self.tie:
+            self.render()
+            self.get_move()
+            self.check_for_winner()
+            self.check_for_tie()
+            self.switch_turn()
+        self.render()
 
     def print_board(self):
         b = self.board
@@ -66,14 +71,39 @@ class Game:
                 self.board[move] = self.turn
                 break
             else:
+                # otherwise, print a message notifying the user of the invalid input and allow the loop to continue
                 print("Invalid input. Try again.")
-            # otherwise, print a message notifying the user of the invalid input and allow the loop to continue
-        
-    def check_winner(self):
+
+    def check_for_winner(self):
         b = self.board
-        # Check rows
-        
+
+        if b["a1"] and b["a1"] == b["b1"] == b["c1"]:
+            self.winner = b["a1"]
+        elif b["a2"] and b["a2"] == b["b2"] == b["c2"]:
+            self.winner = b["a2"]
+        elif b["a3"] and b["a3"] == b["b3"] == b["c3"]:
+            self.winner = b["a3"]
+        elif b["a1"] and b["a1"] == b["a2"] == b["a3"]:
+            self.winner = b["a1"]
+        elif b["b1"] and b["b1"] == b["b2"] == b["b3"]:
+            self.winner = b["b1"]
+        elif b["c1"] and b["c1"] == b["c2"] == b["c3"]:
+            self.winner = b["c1"]
+        elif b["a1"] and b["a1"] == b["b2"] == b["c3"]:
+            self.winner = b["a1"]
+        elif b["c1"] and b["c1"] == b["b2"] == b["a3"]:
+            self.winner = b["c1"]
+
+    def check_for_tie(self):
+        if None not in self.board.values() and not self.winner:
+            self.tie = True
+
+    def switch_turn(self):
+        if self.turn == "X":
+            self.turn = "O"
+        else:
+            self.turn = "X"
 
 
 game_instance = Game()
-game_instance.render()
+game_instance.play_game()
